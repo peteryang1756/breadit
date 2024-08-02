@@ -10,7 +10,6 @@ import { Post, User, Vote } from '@prisma/client'
 import { ArrowBigDown, ArrowBigUp, Loader2 } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
-import UserAvatar from '@/components/UserAvatar'
 
 interface SubRedditPostPageProps {
   params: {
@@ -64,9 +63,10 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
 
         <div className='sm:w-0 w-full flex-1 bg-white p-4 rounded-sm'>
           <div className='flex items-center'>
-            <UserAvatar
-              user={{ name: post?.author.name ?? cachedPost.authorUsername, image: post?.author.image ?? null }}
-              className='h-8 w-8 mr-2'
+            <img
+              src={post?.author.image ?? '/default-avatar.png'}
+              alt={`${post?.author.username ?? cachedPost.authorUsername}'s avatar`}
+              className='h-8 w-8 rounded-full mr-2 object-cover'
             />
             <p className='max-h-40 mt-1 truncate text-xs text-gray-500'>
               {post?.author.username ?? cachedPost.authorUsername}{' '}
