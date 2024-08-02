@@ -13,6 +13,25 @@ export const authOptions: NextAuthOptions = {
     signIn: '/sign-in',
   },
   providers: [
+    id: 'logto',
+      name: '雙龍體育登入系統',
+      type: 'oauth',
+      wellKnown: 'https://auth.ssangyongsports.eu.org/oidc/.well-known/openid-configuration',
+      authorization: { params: { scope: 'openid offline_access profile email' } },
+      clientId: 'crux1kjrndojuyw93xdb2',
+      clientSecret: 'PsVYUTCbh9Zo8eRnOmy9DkFHjI9WI5Zg',
+      client: {
+        id_token_signed_response_alg: 'ES384',
+      },
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name ?? profile.username,
+          email: profile.email,
+          image: profile.picture,
+        };
+      },
+    },
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
