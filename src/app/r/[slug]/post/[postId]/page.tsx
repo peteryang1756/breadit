@@ -1,3 +1,4 @@
+'use client'
 import CommentsSection from '@/components/CommentsSection'
 import EditorOutput from '@/components/EditorOutput'
 import { db } from '@/lib/db'
