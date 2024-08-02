@@ -95,6 +95,7 @@ model Post {
   authorId    String
   subreddit   Subreddit @relation(fields: [subredditId], references: [id])
   subredditId String
+  check     Boolean  @default(false)
   comments    Comment[] 
   votes       Vote[]
 }
@@ -111,7 +112,7 @@ model Comment {
   replyToId String?
   replyTo   Comment?  @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   replies   Comment[] @relation("ReplyTo")
-
+  check     Boolean  @default(false)
   votes     CommentVote[]
   commentId String?
 }
