@@ -39,41 +39,34 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
   if (!post && !cachedPost) return notFound()
 
   return (
-    <div className="max-w-4xl mx-auto mt-4">
-      <div className='bg-white shadow-sm rounded-lg overflow-hidden'>
-        <div className='p-4'>
-          <h1 className='text-2xl font-bold text-gray-900 mb-4'>
-            {post?.title ?? cachedPost.title}
-          </h1>
-          
-          <div className='flex items-start mb-4 pb-4 border-b border-gray-200'>
+    <div className="max-w-4xl mx-auto mt-8">
+      <div className='bg-white shadow-md rounded-lg overflow-hidden'>
+        <div className='p-6'>
+          <div className='flex items-center mb-4'>
             <img
               src={post?.author.image ?? '/default-avatar.png'}
               alt={`${post?.author.username ?? cachedPost.authorUsername}'s avatar`}
-              className='h-10 w-10 rounded-full mr-3 object-cover'
+              className='h-10 w-10 rounded-full mr-3 object-cover border-2 border-gray-200'
             />
-            <div className='flex-grow'>
-              <div className='flex items-center justify-between'>
-                <div>
-                  <p className='font-medium text-gray-800'>
-                    {post?.author.username ?? cachedPost.authorUsername}
-                  </p>
-                  <p className='text-xs text-gray-500'>
-                    {formatTimeToNow(new Date(post?.createdAt ?? cachedPost.createdAt))}
-                  </p>
-                </div>
-                <div className='text-gray-500 text-sm'>
-                  #1
-                </div>
-              </div>
-              <div className='mt-3 prose max-w-none text-gray-700'>
-                <EditorOutput content={post?.content ?? cachedPost.content} />
-              </div>
+            <div>
+              <p className='font-semibold text-gray-800'>
+                {post?.author.username ?? cachedPost.authorUsername}
+              </p>
+              <p className='text-xs text-gray-500'>
+                {formatTimeToNow(new Date(post?.createdAt ?? cachedPost.createdAt))}
+              </p>
             </div>
+          </div>
+          <h1 className='text-2xl font-bold text-gray-900 mb-4'>
+            {post?.title ?? cachedPost.title}
+          </h1>
+
+          <div className='prose max-w-none'>
+            <EditorOutput content={post?.content ?? cachedPost.content} />
           </div>
 
           <div className='mt-6'>
-            <Suspense fallback={<Loader2 className='h-6 w-6 animate-spin text-gray-500' />}>
+            <Suspense fallback={<Loader2 className='h-5 w-5 animate-spin text-gray-500' />}>
               {/* @ts-expect-error Server Component */}
               <CommentsSection postId={post?.id ?? cachedPost.id} />
             </Suspense>
