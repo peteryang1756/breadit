@@ -62,7 +62,7 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
         </Suspense>
 
         <div className='sm:w-0 w-full flex-1 bg-white p-4 rounded-sm'>
-          <div className='flex items-center'>
+          <div className='flex items-center mb-4'>
             <img
               src={post?.author.image ?? '/default-avatar.png'}
               alt={`${post?.author.username ?? cachedPost.authorUsername}'s avatar`}
