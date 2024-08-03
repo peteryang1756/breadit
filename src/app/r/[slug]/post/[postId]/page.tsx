@@ -67,7 +67,7 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
               alt={`${post?.author.username ?? cachedPost.authorUsername}'s avatar`}
               className='h-10 w-10 rounded-full mr-3 object-cover border-2 border-gray-200'
             />
-            <div>
+            
               <p className='font-semibold text-gray-800'>
                 {post?.author.username ?? cachedPost.authorUsername}
               </p>
