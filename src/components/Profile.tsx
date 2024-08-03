@@ -2,7 +2,7 @@
 
 import { formatTimeToNow } from '@/lib/utils'
 import { User, Post } from '@prisma/client'
-import { MessageSquare, Mail, MapPin } from 'lucide-react'
+import { MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 import { FC, useRef } from 'react'
 
@@ -32,26 +32,17 @@ const Profile: FC<ProfileProps> = ({
             </span>
           </div>
 
-          <div className='mt-4 flex items-center text-sm text-gray-500'>
-            <Mail className='mr-2 h-4 w-4' />
-            <span>{user.email}</span>
-          </div>
-
-          {user.location && (
-            <div className='mt-2 flex items-center text-sm text-gray-500'>
-              <MapPin className='mr-2 h-4 w-4' />
-              <span>{user.location}</span>
+          {user.email && (
+            <div className='mt-4 flex items-center text-sm text-gray-500'>
+              <span>{user.email}</span>
             </div>
           )}
 
-          <div
-            className='relative text-sm mt-4 max-h-40 w-full overflow-clip'
-            ref={bioRef}>
-            <p>{user.bio}</p>
-            {bioRef.current?.clientHeight === 160 ? (
-              <div className='absolute bottom-0 left-0 h-24 w-full bg-gradient-to-t from-white to-transparent'></div>
-            ) : null}
-          </div>
+          {user.image && (
+            <div className='mt-4'>
+              <img src={user.image} alt={`${user.username}'s profile picture`} className="w-20 h-20 rounded-full" />
+            </div>
+          )}
         </div>
       </div>
 
