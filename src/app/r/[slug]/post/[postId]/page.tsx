@@ -61,20 +61,22 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
           />
         </Suspense>
 
-        <div className='flex items-center'>
-  <img
-    src={post?.author.image ?? '/default-avatar.png'}
-    alt={`${post?.author.username ?? cachedPost.authorUsername}'s avatar`}
-    className='h-10 w-10 rounded-full mr-3 object-cover border-2 border-gray-200'
-  />
-  <div>
-    <p className='font-semibold text-gray-800'>
-      {post?.author.username ?? cachedPost.authorUsername}
-    </p>
-    <p className='text-xs text-gray-500'>
-      {formatTimeToNow(new Date(post?.createdAt ?? cachedPost.createdAt))}
-    </p>
-  
+        <div className='sm:w-0 w-full flex-1 bg-white p-4 rounded-sm'>
+          <div className='flex items-center'>
+            <img
+              src={post?.author.image ?? '/default-avatar.png'}
+              alt={`${post?.author.username ?? cachedPost.authorUsername}'s avatar`}
+              className='h-10 w-10 rounded-full mr-3 object-cover border-2 border-gray-200'
+            />
+            <div>
+              <p className='font-semibold text-gray-800'>
+                {post?.author.username ?? cachedPost.authorUsername}
+              </p>
+              <p className='text-xs text-gray-500'>
+                {formatTimeToNow(new Date(post?.createdAt ?? cachedPost.createdAt))}
+              </p>
+            </div>
+          </div>
 
           <EditorOutput content={post?.content ?? cachedPost.content} />
           <Suspense
