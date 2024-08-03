@@ -55,7 +55,6 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
                 {authorUsername}
                 {(authorUsername === 'ssangyongsports' || post?.check) && (
                  
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    viewBox="0 0 22 22"
    aria-hidden="true"
