@@ -1,13 +1,11 @@
 import CommentsSection from '@/components/CommentsSection'
 import EditorOutput from '@/components/EditorOutput'
-import PostVoteServer from '@/components/post-vote/PostVoteServer'
-import { buttonVariants } from '@/components/ui/Button'
 import { db } from '@/lib/db'
 import { redis } from '@/lib/redis'
 import { formatTimeToNow } from '@/lib/utils'
 import { CachedPost } from '@/types/redis'
-import { Post, User, Vote } from '@prisma/client'
-import { ArrowBigDown, ArrowBigUp, Loader2 } from 'lucide-react'
+import { Post, User } from '@prisma/client'
+import { Loader2 } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -25,7 +23,7 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
     `post:${params.postId}`
   )) as CachedPost
 
-  let post: (Post & { votes: Vote[]; author: User }) | null = null
+  let post: (Post & { author: User }) | null = null
 
   if (!cachedPost) {
     post = await db.post.findFirst({
@@ -33,7 +31,6 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
         id: params.postId,
       },
       include: {
-        votes: true,
         author: true,
       },
     })
@@ -44,23 +41,6 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
   return (
     <div>
       <div className='h-full flex flex-col sm:flex-row items-center sm:items-start justify-between'>
-        <Suspense fallback={<PostVoteShell />}>
-          {/* @ts-expect-error server component */}
-          <PostVoteServer
-            postId={post?.id ?? cachedPost.id}
-            getData={async () => {
-              return await db.post.findUnique({
-                where: {
-                  id: params.postId,
-                },
-                include: {
-                  votes: true,
-                },
-              })
-            }}
-          />
-        </Suspense>
-
         <div className='sm:w-0 w-full flex-1 bg-white p-4 rounded-sm'>
           <div className='flex items-center mb-4'>
             <img
@@ -87,27 +67,6 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
             <CommentsSection postId={post?.id ?? cachedPost.id} />
           </Suspense>
         </div>
-      </div>
-    </div>
-  )
-}
-
-function PostVoteShell() {
-  return (
-    <div className='flex items-center flex-col pr-6 w-20'>
-      {/* upvote */}
-      <div className={buttonVariants({ variant: 'ghost' })}>
-        <ArrowBigUp className='h-5 w-5 text-zinc-700' />
-      </div>
-
-      {/* score */}
-      <div className='text-center py-2 font-medium text-sm text-zinc-900'>
-        <Loader2 className='h-3 w-3 animate-spin' />
-      </div>
-
-      {/* downvote */}
-      <div className={buttonVariants({ variant: 'ghost' })}>
-        <ArrowBigDown className='h-5 w-5 text-zinc-700' />
       </div>
     </div>
   )
