@@ -61,7 +61,8 @@ const Layout = async ({
   })
 
   return (
-  <p></p>
+
+  <p>{children}</p>
   )
 }
 
