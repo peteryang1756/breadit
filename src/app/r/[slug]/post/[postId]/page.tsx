@@ -41,7 +41,7 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
   const authorUsername = post?.author.username ?? cachedPost.authorUsername
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white shadow-md overflow-hidden sm:rounded-lg">
           <div className="p-4 sm:p-6">
