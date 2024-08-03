@@ -1,5 +1,3 @@
-'use client'
-
 import { formatTimeToNow } from '@/lib/utils'
 import { User, Post } from '@prisma/client'
 import { MessageSquare } from 'lucide-react'
@@ -28,7 +26,8 @@ const Profile: FC<ProfileProps> = ({
               {user.username}
             </h1>
             <span className='text-sm text-gray-500'>
-              Joined {formatTimeToNow(new Date(user.createdAt))}
+              {/* 移除 createdAt 使用 */}
+              Joined
             </span>
           </div>
 
