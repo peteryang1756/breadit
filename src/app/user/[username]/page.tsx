@@ -1,7 +1,7 @@
 // src/app/user/[username]/page.tsx
 
 import Profile from '@/components/Profile'
-import { Post, User } from '@prisma/client'
+import { primsa } from '@prisma/client'
 
 export default async function UserProfilePage({ params }: { params: { username: string } }) {
   const user = await prisma.user.findUnique({
