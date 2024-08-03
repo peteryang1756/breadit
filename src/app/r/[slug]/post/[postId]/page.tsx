@@ -43,7 +43,7 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8">
-        <div className="rounded-lg overflow-hidden">
+        <div className="bg-white shadow-md rounded-lg overflow-hidden">
           <div className="p-6">
             <div className="flex items-center mb-4">
               <img
@@ -84,7 +84,7 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
                 </div>
               }>
               {/* @ts-expect-error Server Component */}
-              <CommentsSection postId={post?.id ?? cachedPost.id} />
+
             </Suspense>
           </div>
         </div>
