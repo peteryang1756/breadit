@@ -1,11 +1,13 @@
 import CommentsSection from '@/components/CommentsSection'
 import EditorOutput from '@/components/EditorOutput'
+import PostVoteServer from '@/components/post-vote/PostVoteServer'
+import { buttonVariants } from '@/components/ui/Button'
 import { db } from '@/lib/db'
 import { redis } from '@/lib/redis'
 import { formatTimeToNow } from '@/lib/utils'
 import { CachedPost } from '@/types/redis'
-import { Post, User } from '@prisma/client'
-import { Loader2 } from 'lucide-react'
+import { Post, User, Vote } from '@prisma/client'
+import { ArrowBigDown, ArrowBigUp, Loader2 } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -23,7 +25,7 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
     `post:${params.postId}`
   )) as CachedPost
 
-  let post: (Post & { author: User }) | null = null
+  let post: (Post & { votes: Vote[]; author: User }) | null = null
 
   if (!cachedPost) {
     post = await db.post.findFirst({
@@ -31,6 +33,7 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
         id: params.postId,
       },
       include: {
+        votes: true,
         author: true,
       },
     })
@@ -39,11 +42,27 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
   if (!post && !cachedPost) return notFound()
 
   return (
-    <div className="max-w-4xl mx-auto mt-8">
-      <div className='bg-white shadow-md rounded-lg overflow-hidden'>
-        <div className='p-6'>
-          <div className='flex items-center mb-4'>
-            <img
+    <div>
+      <div className='h-full flex flex-col sm:flex-row items-center sm:items-start justify-between'>
+        <Suspense fallback={<PostVoteShell />}>
+          {/* @ts-expect-error server component */}
+          <PostVoteServer
+            postId={post?.id ?? cachedPost.id}
+            getData={async () => {
+              return await db.post.findUnique({
+                where: {
+                  id: params.postId,
+                },
+                include: {
+                  votes: true,
+                },
+              })
+            }}
+          />
+        </Suspense>
+
+        <div className='sm:w-0 w-full flex-1 bg-white p-4 rounded-sm'>
+          <img
               src={post?.author.image ?? '/default-avatar.png'}
               alt={`${post?.author.username ?? cachedPost.authorUsername}'s avatar`}
               className='h-10 w-10 rounded-full mr-3 object-cover border-2 border-gray-200'
@@ -55,23 +74,37 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
               <p className='text-xs text-gray-500'>
                 {formatTimeToNow(new Date(post?.createdAt ?? cachedPost.createdAt))}
               </p>
-            </div>
-          </div>
-          <h1 className='text-2xl font-bold text-gray-900 mb-4'>
-            {post?.title ?? cachedPost.title}
-          </h1>
 
-          <div className='prose max-w-none'>
-            <EditorOutput content={post?.content ?? cachedPost.content} />
-          </div>
-
-          <div className='mt-6'>
-            <Suspense fallback={<Loader2 className='h-5 w-5 animate-spin text-gray-500' />}>
-              {/* @ts-expect-error Server Component */}
-              <CommentsSection postId={post?.id ?? cachedPost.id} />
-            </Suspense>
-          </div>
+          <EditorOutput content={post?.content ?? cachedPost.content} />
+          <Suspense
+            fallback={
+              <Loader2 className='h-5 w-5 animate-spin text-zinc-500' />
+            }>
+            {/* @ts-expect-error Server Component */}
+            <CommentsSection postId={post?.id ?? cachedPost.id} />
+          </Suspense>
         </div>
+      </div>
+    </div>
+  )
+}
+
+function PostVoteShell() {
+  return (
+    <div className='flex items-center flex-col pr-6 w-20'>
+      {/* upvote */}
+      <div className={buttonVariants({ variant: 'ghost' })}>
+        <ArrowBigUp className='h-5 w-5 text-zinc-700' />
+      </div>
+
+      {/* score */}
+      <div className='text-center py-2 font-medium text-sm text-zinc-900'>
+        <Loader2 className='h-3 w-3 animate-spin' />
+      </div>
+
+      {/* downvote */}
+      <div className={buttonVariants({ variant: 'ghost' })}>
+        <ArrowBigDown className='h-5 w-5 text-zinc-700' />
       </div>
     </div>
   )
