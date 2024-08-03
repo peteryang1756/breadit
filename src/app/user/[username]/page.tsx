@@ -1,12 +1,21 @@
+// src/app/user/[username]/page.tsx
+
 import Profile from '@/components/Profile'
-import { getUserData } from '@/lib/userData'  // 假设你有这样一个函数来获取用户数据
+import prisma from '@/lib/prisma'  // 假设你有一个Prisma客户端实例
 
 export default async function UserProfilePage({ params }: { params: { username: string } }) {
-  const userData = await getUserData(params.username)
-  
+  const user = await prisma.user.findUnique({
+    where: { username: params.username },
+    include: { posts: true }
+  })
+
+  if (!user) {
+    return <div>User not found</div>
+  }
+
   return (
     <div className="container mx-auto p-4">
-      <Profile user={userData} postCount={userData.posts.length} />
+      <Profile user={user} postCount={user.posts.length} />
     </div>
   )
 }
