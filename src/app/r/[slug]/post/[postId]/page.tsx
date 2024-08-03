@@ -41,10 +41,10 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
   const authorUsername = post?.author.username ?? cachedPost.authorUsername
 
   return (
-    <div className="min-h-screen ">
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <div className="p-6">
+    <div className="min-h-screen bg-gray-100">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white shadow-md overflow-hidden sm:rounded-lg">
+          <div className="p-4 sm:p-6">
             <div className="flex items-center mb-4">
               <img
                 src={post?.author.image ?? '/default-avatar.png'}
