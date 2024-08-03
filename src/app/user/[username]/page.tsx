@@ -7,7 +7,7 @@ import { Prisma } from '@prisma/client'
 export default async function UserProfilePage({ params }: { params: { username: string } }) {
   const user = await db.user.findUnique({
     where: { username: params.username },
-    include: { posts: true }
+    include: { Post: true } // 修改這裡
   })
 
   if (!user) {
@@ -16,7 +16,7 @@ export default async function UserProfilePage({ params }: { params: { username: 
 
   return (
     <div className="container mx-auto p-4">
-      <Profile user={user} postCount={user.posts.length} />
+      <Profile user={user} postCount={user.Post.length} /> {/* 修改這裡 */}
     </div>
   )
 }
