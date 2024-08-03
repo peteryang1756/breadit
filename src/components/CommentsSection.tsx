@@ -44,10 +44,8 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
   return (
     <div className='max-w-3xl mx-auto mt-8'>
       <h2 className='text-2xl font-bold mb-4'>評論</h2>
-      
-      <CreateComment postId={postId} />
 
-      <div className='mt-8 space-y-8'>
+      <div className='space-y-4'>
         {comments
           .filter((comment) => !comment.replyToId)
           .map((topLevelComment) => {
@@ -90,7 +88,7 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
                         )
 
                         return (
-                          <div key={reply.id} className='bg-gray-50 rounded-lg p-4'>
+                          <div key={reply.id} className='bg-white rounded-lg shadow-sm p-4'>
                             <PostComment
                               comment={reply}
                               currentVote={replyVote}
@@ -105,6 +103,11 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
               </div>
             )
           })}
+      </div>
+
+      {/* Create Comment section at the bottom */}
+      <div className='mt-8 bg-white rounded-lg shadow-sm p-6'>
+        <CreateComment postId={postId} />
       </div>
     </div>
   )
