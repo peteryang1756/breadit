@@ -1,12 +1,11 @@
-import { useState } from 'react'
-import { db } from '@/lib/db'
+import React, { useState, FormEvent, ChangeEvent } from 'react'
 
-const AddEmailForm = () => {
-  const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
-  const [message, setMessage] = useState('')
+const AddEmailForm: React.FC = () => {
+  const [email, setEmail] = useState<string>('')
+  const [username, setUsername] = useState<string>('')
+  const [message, setMessage] = useState<string>('')
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     
     try {
@@ -26,7 +25,11 @@ const AddEmailForm = () => {
         setMessage('添加用戶時出錯，請稍後再試。')
       }
     } catch (error) {
-      setMessage('發生錯誤：' + error.message)
+      if (error instanceof Error) {
+        setMessage('發生錯誤：' + error.message)
+      } else {
+        setMessage('發生未知錯誤')
+      }
     }
   }
 
@@ -40,7 +43,7 @@ const AddEmailForm = () => {
           type="email"
           id="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
         />
@@ -53,7 +56,7 @@ const AddEmailForm = () => {
           type="text"
           id="username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
           required
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
         />
