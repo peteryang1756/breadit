@@ -84,7 +84,7 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
                 </div>
               }>
               {/* @ts-expect-error Server Component */}
-
+              <CommentsSection postId={post?.id ?? cachedPost.id} />
             </Suspense>
           </div>
         </div>
