@@ -8,7 +8,7 @@ import { FC, useRef } from 'react'
 
 interface ProfileProps {
   user: User & {
-    posts: Post[]
+    Post: Post[]
   }
   postCount: number
 }
@@ -57,7 +57,7 @@ const Profile: FC<ProfileProps> = ({
 
       <div className='bg-gray-50 px-6 py-4'>
         <h2 className='text-lg font-semibold text-gray-900'>Recent Posts</h2>
-        {user.posts.slice(0, 3).map((post) => (
+        {user.Post.slice(0, 3).map((post) => (
           <div key={post.id} className='mt-4'>
             <Link href={`/post/${post.id}`}>
               <h3 className='text-md font-semibold text-gray-900'>{post.title}</h3>
