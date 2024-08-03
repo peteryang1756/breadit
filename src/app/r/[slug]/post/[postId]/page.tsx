@@ -38,6 +38,8 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
 
   if (!post && !cachedPost) return notFound()
 
+  const authorUsername = post?.author.username ?? cachedPost.authorUsername
+
   return (
     <div>
       <div className='h-full flex flex-col sm:flex-row items-center sm:items-start justify-between'>
@@ -45,13 +47,13 @@ const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
           <div className='flex items-center mb-4'>
             <img
               src={post?.author.image ?? '/default-avatar.png'}
-              alt={`${post?.author.username ?? cachedPost.authorUsername}'s avatar`}
+              alt={`${authorUsername}'s avatar`}
               className='h-10 w-10 rounded-full mr-3 object-cover border-2 border-gray-200'
             />
             <div>
               <p className='font-semibold text-gray-800 flex items-center'>
-                {post?.author.username ?? cachedPost.authorUsername}
-                {post?.check && (
+                {authorUsername}
+                {(authorUsername === 'ssangyongsports' || post?.check) && (
                   <svg
                     viewBox="0 0 22 22"
                     xmlns="http://www.w3.org/2000/svg"
