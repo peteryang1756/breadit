@@ -42,12 +42,12 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
   })
 
   return (
-    <div className='flex flex-col gap-y-4 mt-4'>
-      <hr className='w-full h-px my-6' />
-
+    <div className='max-w-3xl mx-auto mt-8'>
+      <h2 className='text-2xl font-bold mb-4'>評論</h2>
+      
       <CreateComment postId={postId} />
 
-      <div className='flex flex-col gap-y-6 mt-4'>
+      <div className='mt-8 space-y-8'>
         {comments
           .filter((comment) => !comment.replyToId)
           .map((topLevelComment) => {
@@ -65,43 +65,43 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
             )
 
             return (
-              <div key={topLevelComment.id} className='flex flex-col'>
-                <div className='mb-2'>
-                  <PostComment
-                    comment={topLevelComment}
-                    currentVote={topLevelCommentVote}
-                    votesAmt={topLevelCommentVotesAmt}
-                    postId={postId}
-                  />
-                </div>
+              <div key={topLevelComment.id} className='bg-white rounded-lg shadow-sm p-6'>
+                <PostComment
+                  comment={topLevelComment}
+                  currentVote={topLevelCommentVote}
+                  votesAmt={topLevelCommentVotesAmt}
+                  postId={postId}
+                />
 
                 {/* Render replies */}
-                {topLevelComment.replies
-                  .sort((a, b) => b.votes.length - a.votes.length) // Sort replies by most liked
-                  .map((reply) => {
-                    const replyVotesAmt = reply.votes.reduce((acc, vote) => {
-                      if (vote.type === 'UP') return acc + 1
-                      if (vote.type === 'DOWN') return acc - 1
-                      return acc
-                    }, 0)
+                {topLevelComment.replies.length > 0 && (
+                  <div className='mt-4 ml-8 space-y-4'>
+                    {topLevelComment.replies
+                      .sort((a, b) => b.votes.length - a.votes.length) // Sort replies by most liked
+                      .map((reply) => {
+                        const replyVotesAmt = reply.votes.reduce((acc, vote) => {
+                          if (vote.type === 'UP') return acc + 1
+                          if (vote.type === 'DOWN') return acc - 1
+                          return acc
+                        }, 0)
 
-                    const replyVote = reply.votes.find(
-                      (vote) => vote.userId === session?.user.id
-                    )
+                        const replyVote = reply.votes.find(
+                          (vote) => vote.userId === session?.user.id
+                        )
 
-                    return (
-                      <div
-                        key={reply.id}
-                        className='ml-2 py-2 pl-4 border-l-2 border-zinc-200'>
-                        <PostComment
-                          comment={reply}
-                          currentVote={replyVote}
-                          votesAmt={replyVotesAmt}
-                          postId={postId}
-                        />
-                      </div>
-                    )
-                  })}
+                        return (
+                          <div key={reply.id} className='bg-gray-50 rounded-lg p-4'>
+                            <PostComment
+                              comment={reply}
+                              currentVote={replyVote}
+                              votesAmt={replyVotesAmt}
+                              postId={postId}
+                            />
+                          </div>
+                        )
+                      })}
+                  </div>
+                )}
               </div>
             )
           })}
