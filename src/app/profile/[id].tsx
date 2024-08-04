@@ -39,10 +39,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const ProfilePage = ({ user }: { user: User }) => {
   return (
     <div>
-      <h1>{user.name}'s Profile</h1>
+      <h1>{user.name} Profile</h1>
       <p>Email: {user.email}</p>
       <p>Username: {user.username}</p>
-      <p>Created Subreddits: {user.createdSubreddits.map((sub) => sub.name).join(', ')}</p>
+
       <p>Posts: {user.Post.length}</p>
       <p>Comments: {user.Comment.length}</p>
       {/* 根據需要顯示其他用戶數據 */}
