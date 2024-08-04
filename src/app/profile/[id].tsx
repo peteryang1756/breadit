@@ -1,12 +1,11 @@
 import { GetServerSideProps } from 'next';
-import { PrismaClient, User } from '@prisma/client';
-import { useRouter } from 'next/router';
+import { PrismaClient, User, Post, Comment } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params!;
-  const User = await prisma.User.findUnique({
+  const user = await prisma.user.findUnique({
     where: { id: String(id) },
     include: {
       createdSubreddits: true,
@@ -25,26 +24,37 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   });
 
-  if (!User) {
+  if (!user) {
     return {
       notFound: true,
     };
   }
 
   return {
-    props: { User },
+    props: { user: JSON.parse(JSON.stringify(user)) },
   };
 };
 
-const ProfilePage = ({ User }: { User: User }) => {
+type UserWithRelations = User & {
+  Post: Post[];
+  Comment: Comment[];
+  createdSubreddits: any[];
+  subscriptions: any[];
+  votes: any[];
+};
+
+const ProfilePage = ({ user }: { user: UserWithRelations }) => {
   return (
     <div>
-      <h1>{User.name} Profile</h1>
-      <p>Email: {User.email}</p>
-      <p>Username: {User.username}</p>
+      <h1>{user.name} Profile</h1>
+      <p>Email: {user.email}</p>
+      <p>Username: {user.username}</p>
 
-      <p>Posts: {User.Post.length}</p>
-      <p>Comments: {User.Comment.length}</p>
+      <p>Posts: {user.Post.length}</p>
+      <p>Comments: {user.Comment.length}</p>
+      <p>Created Subreddits: {user.createdSubreddits.length}</p>
+      <p>Subscriptions: {user.subscriptions.length}</p>
+      <p>Votes: {user.votes.length}</p>
       {/* 根據需要顯示其他用戶數據 */}
     </div>
   );
