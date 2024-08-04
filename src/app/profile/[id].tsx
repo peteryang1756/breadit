@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params!;
-  const user = await prisma.user.findUnique({
+  const User = await prisma.User.findUnique({
     where: { id: String(id) },
     include: {
       createdSubreddits: true,
@@ -25,26 +25,26 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   });
 
-  if (!user) {
+  if (!User) {
     return {
       notFound: true,
     };
   }
 
   return {
-    props: { user },
+    props: { User },
   };
 };
 
-const ProfilePage = ({ user }: { user: User }) => {
+const ProfilePage = ({ User }: { User: User }) => {
   return (
     <div>
-      <h1>{user.name} Profile</h1>
-      <p>Email: {user.email}</p>
-      <p>Username: {user.username}</p>
+      <h1>{User.name} Profile</h1>
+      <p>Email: {User.email}</p>
+      <p>Username: {User.username}</p>
 
-      <p>Posts: {user.Post.length}</p>
-      <p>Comments: {user.Comment.length}</p>
+      <p>Posts: {User.Post.length}</p>
+      <p>Comments: {User.Comment.length}</p>
       {/* 根據需要顯示其他用戶數據 */}
     </div>
   );
